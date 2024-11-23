@@ -1,11 +1,18 @@
 //importar metodos de la api.js
-import { getEssence ,getEssencebyID , updateEssence, deleteEssence } from "./api";
+import {
+  getEssence,
+  getEssencebyID,
+  updateEssence,
+  deleteEssence,
+} from "./api";
 
-document.addEventListener("DOMContentLoaded", async() =>{
-    const essenceList = document.getElementById("essence-list");
+document.addEventListener("DOMContentLoaded", async () => {
+  const essenceList = document.getElementById("essence-list");
 
-    const essences = await getEssence();
-    essenceList.innerHTML = essences.map(essence => `
+  const essences = await getEssence();
+  essenceList.innerHTML = essences
+    .map(
+      (essence) => `
           <div class="col-xs-12 col-sm-6 col-md-3 card">
             <div class="card-body d-flex flex-column justify-content-end">
               <h5 class="card-title">${essence.NombreDelProducto}</h5>
@@ -13,10 +20,12 @@ document.addEventListener("DOMContentLoaded", async() =>{
               <a onclick="viewEssence(${essence.CodigoDelProducto})" class_btn btn-primary">ver mas</a>
               </div>
             </div>
-        `).join("");
+        `
+    )
+    .join("");
 });
 
-//metodo para ver los detalles del producto cuando damos click en el boton ver mas 
+//metodo para ver los detalles del producto cuando damos click en el boton ver mas
 
 window.viewEssence = async (CodigoDelProducto) => {
   const essence = await getEssencebyID(CodigoDelProducto);
@@ -36,7 +45,7 @@ window.viewEssence = async (CodigoDelProducto) => {
 };
 
 //Crear la vista para editar la informacion
-window.enableEdit = async (CodigoDelProducto) =>{
+window.enableEdit = async (CodigoDelProducto) => {
   const essence = await getEssencebyID(CodigoDelProducto);
 
   const editForm = `
@@ -47,22 +56,22 @@ window.enableEdit = async (CodigoDelProducto) =>{
       <button class="btn btn-success" onclick="saveEdit(${CodigoDelProducto})">Guardar</button>
     </div>
   `;
-  document.getElementById("essence-List").innerHTML =editForm;
-}
+  document.getElementById("essence-List").innerHTML = editForm;
+};
 
 //Guardar la informacion Actualizada
 window.saveEdit = async (CodigoDelProducto) => {
-  const essenceUpdate ={
+  const essenceUpdate = {
     NombreDelProducto: document.getElementById("NombreDelProducto").value,
     DetalleDelProducto: document.getElementById("DetalleDelProducto").value,
     Precio: parseFloat(document.getElementById("Precio").value),
   };
   await updateEssence(CodigoDelProducto, essenceUpdate);
-  location.reload(); //Recarga la pagina para ver los cambios 
-}
+  location.reload(); //Recarga la pagina para ver los cambios
+};
 
-//Borrar los productos 
+//Borrar los productos
 window.deleteEssence = async (CodigoDelProducto) => {
   await deleteEssence(CodigoDelProducto);
-  location.reload();//Recarga la pagina 
-}
+  location.reload(); //Recarga la pagina
+};
